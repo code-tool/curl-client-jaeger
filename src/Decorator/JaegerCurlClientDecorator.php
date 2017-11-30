@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Http\Client\Curl\Jaeger\Decorator;
 
-use Http\Client\Curl\CurlClient;
 use Http\Client\Curl\CurlClientInterface;
 use Http\Client\Curl\Decorator\AbstractCurlClientDecorator;
 use Http\Client\Curl\Jaeger\Tag\HttpConnectTimeTag;
@@ -39,7 +38,7 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
         string $format,
         CodecRegistry $registry,
         TracerInterface $tracer,
-        CurlClient $curlClient
+        CurlClientInterface $curlClient
     ) {
         $this->header = $header;
         $this->format = $format;
