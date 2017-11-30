@@ -1,0 +1,19 @@
+{
+  "name": "code-tool/curl-client-jaeger",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Http\\Client\\Curl\\Jaeger\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.6",
+    "code-tool/curl-client": "@stable",
+    "code-tool/jaeger-client-php": "@stable"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
