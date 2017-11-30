@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Http\Client\Curl\Jaeger\Decorator;
 
 use Http\Client\Curl\CurlClient;
@@ -34,15 +32,24 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
 
     private $tracer;
 
+    /**
+     * JaegerCurlClientDecorator constructor.
+     *
+     * @param string          $header
+     * @param string          $format
+     * @param CodecRegistry   $registry
+     * @param TracerInterface $tracer
+     * @param CurlClient      $curlClient
+     */
     public function __construct(
-        string $header,
-        string $format,
+        $header,
+        $format,
         CodecRegistry $registry,
         TracerInterface $tracer,
         CurlClient $curlClient
     ) {
-        $this->header = $header;
-        $this->format = $format;
+        $this->header = (string)$header;
+        $this->format = (string)$format;
         $this->registry = $registry;
         $this->tracer = $tracer;
         parent::__construct($curlClient);

@@ -1,14 +1,17 @@
 <?php
-declare(strict_types=1);
-
 namespace Http\Client\Curl\Jaeger\Tag;
 
 use Jaeger\Tag\LongTag;
 
 class HttpDownloadSpeedTag extends LongTag
 {
-    public function __construct(int $value)
+    /**
+     * HttpDownloadSpeedTag constructor.
+     *
+     * @param int $value
+     */
+    public function __construct($value)
     {
-        parent::__construct('http.download_speed', $value);
+        parent::__construct('http.download_speed', (int)$value);
     }
 }

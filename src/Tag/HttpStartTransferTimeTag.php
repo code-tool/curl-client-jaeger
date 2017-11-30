@@ -1,14 +1,17 @@
 <?php
-declare(strict_types=1);
-
 namespace Http\Client\Curl\Jaeger\Tag;
 
 use Jaeger\Tag\DoubleTag;
 
 class HttpStartTransferTimeTag extends DoubleTag
 {
-    public function __construct(float $value)
+    /**
+     * HttpStartTransferTimeTag constructor.
+     *
+     * @param float $value
+     */
+    public function __construct($value)
     {
-        parent::__construct('http.start_transfer_time', $value);
+        parent::__construct('http.start_transfer_time', (float)$value);
     }
 }

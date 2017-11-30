@@ -1,14 +1,17 @@
 <?php
-declare(strict_types=1);
-
 namespace Http\Client\Curl\Jaeger\Tag;
 
 use Jaeger\Tag\StringTag;
 
 class HttpUserAgentTag extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * HttpUserAgentTag constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
-        parent::__construct('http.agent', $value);
+        parent::__construct('http.agent', (string)$value);
     }
 }
