@@ -71,9 +71,6 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
             $response = parent::sendRequest(
                 $request->withHeader($this->header, $this->registry[$this->format]->encode($span->getContext()))
             );
-        } catch (RequestException $e) {
-            $span->addTag(new StringTag('network.failed', $e->getMessage()));
-        } finally {
             $curlInfo = $response->getCurlInfo();
             $span
                 ->addTag(new HttpCodeTag($response->getStatusCode()))
@@ -84,6 +81,9 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
                 ->addTag(new HttpTotalTimeTag($curlInfo[CurlClientInterface::CURL_TOTAL_TIME]))
                 ->addTag(new HttpDownloadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_DOWNLOAD]))
                 ->addTag(new HttpUploadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_UPLOAD]));
+        } catch (RequestException $e) {
+            $span->addTag(new StringTag('network.failed', $e->getMessage()));
+        } finally {
             $this->tracer->finish($span);
         }
 
