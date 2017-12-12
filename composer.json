@@ -8,8 +8,8 @@
   },
   "require": {
     "php": ">=7.1",
-    "code-tool/curl-client": "@stable",
-    "code-tool/jaeger-client-php": "@stable"
+    "code-tool/curl-client": "~2",
+    "code-tool/jaeger-client-php": "~2"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
