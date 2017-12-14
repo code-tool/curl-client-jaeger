@@ -75,6 +75,8 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
                 ->addTag(new HttpUploadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_UPLOAD]));
         } catch (RequestException $e) {
             $span->addTag(new StringTag('network.failed', $e->getMessage()));
+
+            throw $e;
         } finally {
             $this->tracer->finish($span);
         }
