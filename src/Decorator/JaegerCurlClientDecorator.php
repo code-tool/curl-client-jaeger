@@ -18,6 +18,9 @@ use Jaeger\Codec\CodecRegistry;
 use Jaeger\Http\HttpCodeTag;
 use Jaeger\Http\HttpMethodTag;
 use Jaeger\Http\HttpUriTag;
+use Jaeger\Tag\ErrorTag;
+use Jaeger\Tag\PeerIpv4Tag;
+use Jaeger\Tag\PeerPortTag;
 use Jaeger\Tag\StringTag;
 use Jaeger\Tracer\TracerInterface;
 use Psr\Http\Message\RequestInterface;
@@ -72,8 +75,11 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
                 ->addTag(new HttpStartTransferTimeTag($curlInfo[CurlClientInterface::CURL_STARTTRANSFER_TIME]))
                 ->addTag(new HttpTotalTimeTag($curlInfo[CurlClientInterface::CURL_TOTAL_TIME]))
                 ->addTag(new HttpDownloadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_DOWNLOAD]))
-                ->addTag(new HttpUploadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_UPLOAD]));
+                ->addTag(new HttpUploadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_UPLOAD]))
+                ->addTag(new PeerIpv4Tag($curlInfo[CurlClientInterface::CURL_PRIMARY_IP]))
+                ->addTag(new PeerPortTag($curlInfo[CurlClientInterface::CURL_PRIMARY_PORT]));
         } catch (RequestException $e) {
+            $span->addTag(new ErrorTag());
             $span->addTag(new StringTag('network.failed', $e->getMessage()));
 
             throw $e;
