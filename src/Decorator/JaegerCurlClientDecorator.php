@@ -5,6 +5,7 @@ namespace Http\Client\Curl\Jaeger\Decorator;
 
 use Http\Client\Curl\CurlClientInterface;
 use Http\Client\Curl\Decorator\AbstractCurlClientDecorator;
+use Http\Client\Curl\Jaeger\Tag\CurlClientComponentTag;
 use Http\Client\Curl\Jaeger\Tag\HttpConnectTimeTag;
 use Http\Client\Curl\Jaeger\Tag\HttpDownloadSpeedTag;
 use Http\Client\Curl\Jaeger\Tag\HttpLookupTimeTag;
@@ -18,10 +19,14 @@ use Jaeger\Codec\CodecRegistry;
 use Jaeger\Http\HttpCodeTag;
 use Jaeger\Http\HttpMethodTag;
 use Jaeger\Http\HttpUriTag;
+use Jaeger\Log\ErrorLog;
+use Jaeger\Log\UserLog;
 use Jaeger\Tag\ErrorTag;
+use Jaeger\Tag\PeerAddressTag;
+use Jaeger\Tag\PeerHostnameTag;
 use Jaeger\Tag\PeerIpv4Tag;
 use Jaeger\Tag\PeerPortTag;
-use Jaeger\Tag\StringTag;
+use Jaeger\Tag\SpanKindClientTag;
 use Jaeger\Tracer\TracerInterface;
 use Psr\Http\Message\RequestInterface;
 
@@ -59,7 +64,17 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
             [
                 new HttpMethodTag($request->getMethod()),
                 new HttpUriTag($request->getUri()->__toString()),
+                new SpanKindClientTag(),
+                new CurlClientComponentTag(),
+                new PeerAddressTag(sprintf('%s:%s', $request->getUri()->getHost(), $request->getUri()->getPort())),
+                new PeerHostnameTag($request->getUri()->getHost())
             ]
+        );
+        $span->addLog(
+            new UserLog(
+                'debug',
+                sprintf('%s: %s', $this->header, $this->registry[$this->format]->encode($span->getContext()))
+            )
         );
         $response = null;
         try {
@@ -80,7 +95,7 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
                 ->addTag(new PeerPortTag($curlInfo[CurlClientInterface::CURL_PRIMARY_PORT]));
         } catch (RequestException $e) {
             $span->addTag(new ErrorTag());
-            $span->addTag(new StringTag('network.failed', $e->getMessage()));
+            $span->addLog(new ErrorLog($e->getMessage(), $e->getTraceAsString()));
 
             throw $e;
         } finally {
