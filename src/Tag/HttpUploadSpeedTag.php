@@ -2,7 +2,6 @@
 namespace Http\Client\Curl\Jaeger\Tag;
 
 use Jaeger\Tag\DoubleTag;
-use Jaeger\Tag\LongTag;
 
 class HttpUploadSpeedTag extends DoubleTag
 {
