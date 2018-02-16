@@ -4,14 +4,11 @@ namespace Http\Client\Curl\Jaeger\Decorator;
 
 use Http\Client\Curl\CurlClientInterface;
 use Http\Client\Curl\Decorator\AbstractCurlClientDecorator;
+use Http\Client\Curl\Jaeger\Log\HttpConnectTimeLog;
+use Http\Client\Curl\Jaeger\Log\HttpResolveTimeLog;
+use Http\Client\Curl\Jaeger\Log\HttpResponseFinishTimeLog;
+use Http\Client\Curl\Jaeger\Log\HttpResponseStartTimeLog;
 use Http\Client\Curl\Jaeger\Tag\CurlClientComponentTag;
-use Http\Client\Curl\Jaeger\Tag\HttpConnectTimeTag;
-use Http\Client\Curl\Jaeger\Tag\HttpDownloadSpeedTag;
-use Http\Client\Curl\Jaeger\Tag\HttpLookupTimeTag;
-use Http\Client\Curl\Jaeger\Tag\HttpPretransferTimeTag;
-use Http\Client\Curl\Jaeger\Tag\HttpStartTransferTimeTag;
-use Http\Client\Curl\Jaeger\Tag\HttpTotalTimeTag;
-use Http\Client\Curl\Jaeger\Tag\HttpUploadSpeedTag;
 use Http\Client\Exception\RequestException;
 use Jaeger\Codec\CodecInterface;
 use Jaeger\Codec\CodecRegistry;
@@ -80,27 +77,26 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
         );
         $span->addLog(
             new UserLog(
+                'jaeger.header',
                 'debug',
                 sprintf('%s: %s', $this->header, $this->registry[$this->format]->encode($span->getContext()))
             )
         );
         $response = null;
         try {
+            $time = microtime(true);
             $response = parent::sendRequest(
                 $request->withHeader($this->header, $this->registry[$this->format]->encode($span->getContext()))
             );
             $curlInfo = $response->getCurlInfo();
             $span
                 ->addTag(new HttpCodeTag($response->getStatusCode()))
-                ->addTag(new HttpConnectTimeTag($curlInfo[CurlClientInterface::CURL_CONNECT_TIME]))
-                ->addTag(new HttpLookupTimeTag($curlInfo[CurlClientInterface::CURL_NAMELOOKUP_TIME]))
-                ->addTag(new HttpPretransferTimeTag($curlInfo[CurlClientInterface::CURL_PRETRANSFER_TIME]))
-                ->addTag(new HttpStartTransferTimeTag($curlInfo[CurlClientInterface::CURL_STARTTRANSFER_TIME]))
-                ->addTag(new HttpTotalTimeTag($curlInfo[CurlClientInterface::CURL_TOTAL_TIME]))
-                ->addTag(new HttpDownloadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_DOWNLOAD]))
-                ->addTag(new HttpUploadSpeedTag($curlInfo[CurlClientInterface::CURL_SPEED_UPLOAD]))
                 ->addTag(new PeerIpv4Tag($curlInfo[CurlClientInterface::CURL_PRIMARY_IP]))
-                ->addTag(new PeerPortTag($curlInfo[CurlClientInterface::CURL_PRIMARY_PORT]));
+                ->addTag(new PeerPortTag($curlInfo[CurlClientInterface::CURL_PRIMARY_PORT]))
+                ->addLog(new HttpConnectTimeLog($time, $curlInfo[CurlClientInterface::CURL_CONNECT_TIME]))
+                ->addLog(new HttpResolveTimeLog($time, $curlInfo[CurlClientInterface::CURL_NAMELOOKUP_TIME]))
+                ->addLog(new HttpResponseStartTimeLog($time, $curlInfo[CurlClientInterface::CURL_STARTTRANSFER_TIME]))
+                ->addLog(new HttpResponseFinishTimeLog($time, $curlInfo[CurlClientInterface::CURL_TOTAL_TIME]));
         } catch (RequestException $e) {
             $span->addTag(new ErrorTag());
             $span->addLog(new ErrorLog($e->getMessage(), $e->getTraceAsString()));
