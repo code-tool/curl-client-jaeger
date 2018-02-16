@@ -6,6 +6,11 @@
       "Http\\Client\\Curl\\Jaeger\\": "src/"
     }
   },
+  "config": {
+    "platform": {
+      "php": "5.6.1"
+    }
+  },
   "require": {
     "php": "~5.6 || ~7",
     "code-tool/curl-client": "~1 || ~2",

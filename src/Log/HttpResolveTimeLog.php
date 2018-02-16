@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Http\Client\Curl\Jaeger\Log;
 
@@ -7,7 +6,13 @@ use Jaeger\Log\UserLog;
 
 class HttpResolveTimeLog extends UserLog
 {
-    public function __construct(int $startTime, int $resolveOffset)
+    /**
+     * HttpResolveTimeLog constructor.
+     *
+     * @param int $startTime
+     * @param int $resolveOffset
+     */
+    public function __construct($startTime, $resolveOffset)
     {
         parent::__construct(
             'resolve',
