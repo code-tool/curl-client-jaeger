@@ -17,7 +17,7 @@ class HttpResponseStartTimeLog extends UserLog
         parent::__construct(
             'response.start',
             'debug',
-            (string)(1000000 * ($startTime + $startOffset)),
+            'First byte received',
             (int)round(1000000 * ($startTime + $startOffset))
         );
     }

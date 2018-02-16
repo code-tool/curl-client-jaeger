@@ -17,7 +17,7 @@ class HttpResolveTimeLog extends UserLog
         parent::__construct(
             'resolve',
             'debug',
-            (string)(1000000 * ($startTime + $resolveOffset)),
+            'Resolve time',
             (int)round(1000000 * ($startTime + $resolveOffset))
         );
     }

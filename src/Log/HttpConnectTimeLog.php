@@ -17,7 +17,7 @@ class HttpConnectTimeLog extends UserLog
         parent::__construct(
             'connect',
             'debug',
-            (string)(1000000 * ($startTime + $connectOffset)),
+            'Connect time',
             (int)round(1000000 * ($startTime + $connectOffset))
         );
     }
