@@ -12,7 +12,7 @@ class HttpResponseFinishTimeLog extends UserLog
         parent::__construct(
             'response.finish',
             'debug',
-            (string)(1000000 * ($startTime + $finishOffset)),
+            'Response received',
             (int)round(1000000 * ($startTime + $finishOffset))
         );
     }
