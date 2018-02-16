@@ -25,6 +25,7 @@ use Jaeger\Tag\PeerPortTag;
 use Jaeger\Tag\SpanKindClientTag;
 use Jaeger\Tracer\TracerInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Log\LogLevel;
 
 class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
 {
@@ -78,7 +79,7 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
         $span->addLog(
             new UserLog(
                 'jaeger.header',
-                'debug',
+                LogLevel::DEBUG,
                 sprintf('%s: %s', $this->header, $this->registry[$this->format]->encode($span->getContext()))
             )
         );

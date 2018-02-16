@@ -3,6 +3,7 @@
 namespace Http\Client\Curl\Jaeger\Log;
 
 use Jaeger\Log\UserLog;
+use Psr\Log\LogLevel;
 
 class HttpResponseStartTimeLog extends UserLog
 {
@@ -16,7 +17,7 @@ class HttpResponseStartTimeLog extends UserLog
     {
         parent::__construct(
             'response.start',
-            'debug',
+            LogLevel::DEBUG,
             'First byte received',
             (int)round(1000000 * ($startTime + $startOffset))
         );
