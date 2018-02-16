@@ -9,16 +9,16 @@ class HttpResolveTimeLog extends UserLog
     /**
      * HttpResolveTimeLog constructor.
      *
-     * @param int $startTime
-     * @param int $resolveOffset
+     * @param float $startTime
+     * @param float $resolveOffset
      */
     public function __construct($startTime, $resolveOffset)
     {
         parent::__construct(
             'resolve',
             'debug',
-            (string)(1000 * ($startTime + $resolveOffset)),
-            1000 * ($startTime + $resolveOffset)
+            (string)(1000000 * ($startTime + $resolveOffset)),
+            (int)round(1000000 * ($startTime + $resolveOffset))
         );
     }
 }

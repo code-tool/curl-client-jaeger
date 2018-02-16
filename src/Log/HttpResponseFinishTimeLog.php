@@ -9,16 +9,16 @@ class HttpResponseFinishTimeLog extends UserLog
     /**
      * HttpResponseFinishTimeLog constructor.
      *
-     * @param int $startTime
-     * @param int $finishOffset
+     * @param float $startTime
+     * @param float $finishOffset
      */
     public function __construct($startTime, $finishOffset)
     {
         parent::__construct(
             'response.finish',
             'debug',
-            (string)(1000 * ($startTime + $finishOffset)),
-            1000 * ($startTime + $finishOffset)
+            (string)(1000000 * ($startTime + $finishOffset)),
+            (int)round(1000000 * ($startTime + $finishOffset))
         );
     }
 }

@@ -9,16 +9,16 @@ class HttpConnectTimeLog extends UserLog
     /**
      * HttpConnectTimeLog constructor.
      *
-     * @param int $startTime
-     * @param int $connectOffset
+     * @param float $startTime
+     * @param float $connectOffset
      */
     public function __construct($startTime, $connectOffset)
     {
         parent::__construct(
             'connect',
             'debug',
-            (string)(1000 * ($startTime + $connectOffset)),
-            1000 * ($startTime + $connectOffset)
+            (string)(1000000 * ($startTime + $connectOffset)),
+            (int)round(1000000 * ($startTime + $connectOffset))
         );
     }
 }
