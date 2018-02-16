@@ -7,13 +7,13 @@ use Jaeger\Log\UserLog;
 
 class HttpConnectTimeLog extends UserLog
 {
-    public function __construct(int $startTime, int $connectOffset)
+    public function __construct(float $startTime, float $connectOffset)
     {
         parent::__construct(
             'connect',
             'debug',
-            (string)(1000 * ($startTime + $connectOffset)),
-            1000 * ($startTime + $connectOffset)
+            (string)(1000000 * ($startTime + $connectOffset)),
+            (int)round(1000000 * ($startTime + $connectOffset))
         );
     }
 }

@@ -7,13 +7,13 @@ use Jaeger\Log\UserLog;
 
 class HttpResponseFinishTimeLog extends UserLog
 {
-    public function __construct(int $startTime, int $finishOffset)
+    public function __construct(float $startTime, float $finishOffset)
     {
         parent::__construct(
             'response.finish',
             'debug',
-            (string)(1000 * ($startTime + $finishOffset)),
-            1000 * ($startTime + $finishOffset)
+            (string)(1000000 * ($startTime + $finishOffset)),
+            (int)round(1000000 * ($startTime + $finishOffset))
         );
     }
 }
