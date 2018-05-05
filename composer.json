@@ -9,7 +9,7 @@
   "require": {
     "php": "~5.6 || ~7",
     "code-tool/curl-client": "~1 || ~2",
-    "code-tool/jaeger-client-php": "~1.8.2 || ~2.8.2"
+    "code-tool/jaeger-client-php": "~1.8 || ~2.8"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
