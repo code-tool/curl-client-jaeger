@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Http\Client\Curl\Jaeger\Tag;
 
 use Jaeger\Tag\DoubleTag;
-use Jaeger\Tag\LongTag;
 
 class HttpDownloadSpeedTag extends DoubleTag
 {
