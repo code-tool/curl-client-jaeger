@@ -64,7 +64,12 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
         parent::__construct($curlClient);
     }
 
-    public function send(CurlRequest $request): CurlResponse
+    /**
+     * @param CurlRequest $request
+     *
+     * @return CurlResponse
+     */
+    public function send(CurlRequest $request)
     {
         $span = $this->tracer->start(
             'http.request',
