@@ -8,7 +8,7 @@
   },
   "require": {
     "php": ">=7.1",
-    "code-tool/curl-client": "^4",
+    "code-tool/curl-client": "^3 || ^4",
     "code-tool/jaeger-client-php": "~2.8"
   },
   "require-dev": {
