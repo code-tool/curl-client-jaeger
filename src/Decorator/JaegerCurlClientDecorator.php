@@ -97,7 +97,7 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
 
             throw $e;
         } finally {
-            $this->tracer->finish($span);
+            $span->finish();
         }
 
         return $response;
