@@ -12,7 +12,6 @@ use Http\Client\Curl\Jaeger\Log\HttpResponseStartTimeLog;
 use Http\Client\Curl\Jaeger\Tag\CurlClientComponentTag;
 use Http\Client\Curl\Request\CurlRequest;
 use Http\Client\Curl\Response\CurlResponse;
-use Http\Client\Exception\RequestException;
 use Jaeger\Codec\CodecInterface;
 use Jaeger\Codec\CodecRegistry;
 use Jaeger\Http\HttpCodeTag;
@@ -62,11 +61,11 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
             'http.request',
             [
                 new HttpMethodTag($request->getMethod()),
-                new HttpUriTag($request->getUri()->__toString()),
+                new HttpUriTag((string)$request->getUri()),
                 new SpanKindClientTag(),
                 new CurlClientComponentTag(),
                 new PeerAddressTag(sprintf('%s:%s', $request->getUri()->getHost(), $request->getUri()->getPort())),
-                new PeerHostnameTag($request->getUri()->getHost())
+                new PeerHostnameTag($request->getUri()->getHost()),
             ]
         );
         $span->addLog(
@@ -91,10 +90,9 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
                 ->addLog(new HttpResolveTimeLog($time, $curlInfo->namelookupTime()))
                 ->addLog(new HttpResponseStartTimeLog($time, $curlInfo->starttransferTime()))
                 ->addLog(new HttpResponseFinishTimeLog($time, $curlInfo->totalTime()));
-        } catch (RequestException $e) {
+        } catch (\Throwable $e) {
             $span->addTag(new ErrorTag());
             $span->addLog(new ErrorLog($e->getMessage(), $e->getTraceAsString()));
-
             throw $e;
         } finally {
             $span->finish();
