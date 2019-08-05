@@ -91,8 +91,9 @@ class JaegerCurlClientDecorator extends AbstractCurlClientDecorator
                 ->addLog(new HttpResponseStartTimeLog($time, $curlInfo->starttransferTime()))
                 ->addLog(new HttpResponseFinishTimeLog($time, $curlInfo->totalTime()));
         } catch (\Throwable $e) {
-            $span->addTag(new ErrorTag());
-            $span->addLog(new ErrorLog($e->getMessage(), $e->getTraceAsString()));
+            $span
+                ->addTag(new ErrorTag())
+                ->addLog(new ErrorLog($e->getMessage(), $e->getTraceAsString()));
             throw $e;
         } finally {
             $span->finish();
